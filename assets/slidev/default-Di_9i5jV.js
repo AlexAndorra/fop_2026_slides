@@ -1,0 +1,1 @@
+import{o,e as s,i as t}from"../modules/vue-C6IPDUIV.js";import{b as l}from"../index-DpPh6jcd.js";const r={},n={class:"slidev-layout default"};function _(e,a){return o(),s("div",n,[t(e.$slots,"default")])}const i=l(r,[["render",_],["__file","/home/runner/work/fop_2026_slides/fop_2026_slides/node_modules/@slidev/client/layouts/default.vue"]]);export{i as I};
