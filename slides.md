@@ -8,6 +8,7 @@ info: "The Soccer Factor Model: Disentangling true player skill from team contex
 title: "Unveiling True Talent - SFM"
 description: "The Soccer Factor Model: Disentangling true player skill from team context using Bayesian inference. Presented at Field of Play 2026."
 author: "Alexandre Andorra"
+image: "https://alexandorra.github.io/fop_2026_slides/stadium.png"
 drawings:
   persist: false
 transition: slide-up
