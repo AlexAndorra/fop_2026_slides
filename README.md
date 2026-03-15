@@ -1,8 +1,17 @@
 # Unveiling True Talent: The Soccer Factor Model
 
+Full slide presentation [here](https://alexandorra.github.io/fop_2026_slides/).
+
 Talk presented by [Alexandre Andorra](https://alexandorra.github.io/) at [Field of Play 2026](https://www.fieldofplay.co.uk/) in Manchester, based on the live modeling platform [soccerfactormodel.com](https://www.soccerfactormodel.com), co-authored with [Maximilian Göbel](https://www.maximiliangoebel.com/).
 
 This repository contains the full [Slidev](https://sli.dev/) presentation source code, including the slides, assets, and speaker notes.
+
+## 🔗 Links and Resources
+
+- **Full Paper**: [arXiv:2412.05911](https://arxiv.org/abs/2412.05911)
+- **Live Platform**: [soccerfactormodel.com](https://www.soccerfactormodel.com)
+- **Podcast**: [Learning Bayesian Statistics](https://learnbayesstats.com)
+- **Alexandre's Website**: [alexandorra.github.io](https://alexandorra.github.io)
 
 ---
 
@@ -53,12 +62,3 @@ npm run build
 npm run export
 ```
 *(Note: Requires Playwright to be installed (`npx playwright install`))*
-
----
-
-## 🔗 Links and Resources
-
-- **Full Paper**: [arXiv:2412.05911](https://arxiv.org/abs/2412.05911)
-- **Live Platform**: [soccerfactormodel.com](https://www.soccerfactormodel.com)
-- **Podcast**: [Learning Bayesian Statistics](https://learnbayesstats.com)
-- **Alexandre's Website**: [alexandorra.github.io](https://alexandorra.github.io)
