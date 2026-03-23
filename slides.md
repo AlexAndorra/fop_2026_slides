@@ -261,29 +261,31 @@ As a sporting director, this distinction between an established high-floor asset
 
 Out-of-sample predictive performance on upcoming matches:
 
-<div class="grid grid-cols-3 gap-4 text-center mt-8 mb-10">
-  <div class="bg-gray-800 flex flex-col justify-center items-center py-6 rounded border border-gray-700">
-    <span class="text-4xl font-bold text-emerald-400">15.2%</span>
-    <span class="text-sm mt-2 text-gray-300">Better predictions than a player's historical average</span>
+<div class="grid grid-cols-3 gap-4 text-center mt-4 mb-6">
+  <div class="bg-gray-800 flex flex-col justify-center items-center py-4 rounded border border-gray-700">
+    <span class="text-3xl font-bold text-emerald-400">15.2%</span>
+    <span class="text-xs mt-1 text-gray-300">Better predictions than a player's historical average</span>
   </div>
-  <div class="bg-gray-800 flex flex-col justify-center items-center py-6 rounded border border-gray-700">
-    <span class="text-4xl font-bold text-cyan-400">2.5×</span>
-    <span class="text-sm mt-2 text-gray-300">Lift: Top prediction decile vs Bottom decile</span>
+  <div class="bg-gray-800 flex flex-col justify-center items-center py-4 rounded border border-gray-700">
+    <span class="text-3xl font-bold text-cyan-400">2.5×</span>
+    <span class="text-xs mt-1 text-gray-300">Lift: Top prediction decile vs Bottom decile</span>
   </div>
-  <div class="bg-gray-800 flex flex-col justify-center items-center py-6 rounded border border-gray-700">
-    <span class="text-4xl font-bold text-indigo-400">0.278</span>
-    <span class="text-sm mt-2 text-gray-300">Best Brier Score across model variants</span>
+  <div class="bg-gray-800 flex flex-col justify-center items-center py-4 rounded border border-gray-700">
+    <span class="text-3xl font-bold text-indigo-400">0.278</span>
+    <span class="text-xs mt-1 text-gray-300">Best Brier Score across model variants</span>
   </div>
 </div>
 
 <div class="grid grid-cols-2 gap-8">
   <div>
-    <h4 class="font-bold mb-4 text-gray-200 border-b border-gray-700 pb-2">Improvement vs Naive Baseline</h4>
-    <ul class="text-sm text-gray-300 space-y-2">
-      <li><span class="inline-block w-40 font-mono">Champions League</span> <span class="text-green-400">+23.1%</span></li>
-      <li><span class="inline-block w-40 font-mono">La Liga</span> <span class="text-green-400">+19.7%</span></li>
-      <li><span class="inline-block w-40 font-mono">Serie A</span> <span class="text-green-400">+16.1%</span></li>
-      <li><span class="inline-block w-40 font-mono">Premier League</span> <span class="text-green-400">+11.5%</span></li>
+    <h4 class="font-bold mb-2 text-gray-200 border-b border-gray-700 pb-1">Improvement vs Naive Baseline</h4>
+    <ul class="text-sm text-gray-300 space-y-1">
+      <li><span class="inline-block w-40 font-mono">Champions League</span> <span class="text-green-400">+23.7%</span></li>
+      <li><span class="inline-block w-40 font-mono">La Liga</span> <span class="text-green-400">+20.9%</span></li>
+      <li><span class="inline-block w-40 font-mono">Ligue 1</span> <span class="text-green-400">+18.4%</span></li>
+      <li><span class="inline-block w-40 font-mono">Serie A</span> <span class="text-green-400">+17.2%</span></li>
+      <li><span class="inline-block w-40 font-mono">Premier League</span> <span class="text-green-400">+11.9%</span></li>
+      <li><span class="inline-block w-40 font-mono">Bundesliga</span> <span class="text-green-400">+11.9%</span></li>
     </ul>
   </div>
   <div class="flex items-center text-gray-400 text-sm italic">
