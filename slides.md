@@ -148,7 +148,7 @@ transition: slide-left
   <div v-click class="bg-gray-800 p-5 rounded-lg border-t-4 border-cyan-500">
     <h3 class="text-xl font-bold text-cyan-400 mb-2">Factors (X)</h3>
     <p class="text-sm text-gray-300">
-      Team strength proxies: points differential, opponent defensive rank, home advantage, player momentum, and playing position.
+      Team strength proxies: points differential, opponent defensive rank, home advantage, scoring momentum, and playing position.
     </p>
   </div>
   
@@ -165,7 +165,7 @@ Here's the model in a nutshell. We're predicting P of goals equals n, given alph
 
 First, SKILL — alpha. This is a player-specific intercept, but it's not static. We model it as a Gaussian Process over time using Hilbert-Space approximations, so a player's skill can evolve both across seasons and within a season. Messi at 25 is not the same as Messi at 37.
 
-Second, FACTORS — X. These are our team-strength proxies. Points differential between the player's team and the opponent, the opponent's defensive ranking, home advantage, the player's recent scoring momentum, and position. We ran extensive ablation studies — which I'll touch on — to find the right factor specification.
+Second, FACTORS — X. These are our team-strength proxies. Points differential between the player's team and the opponent, the opponent's defensive ranking, home advantage, recent scoring momentum, and position. We ran a systematic ablation study — over 20 model variants — to find the right factor specification. As we'll see, picking which factors to include is one of the most consequential modeling decisions, and the answer isn't always what you'd expect.
 
 Third, the BAYESIAN ENGINE. Everything is estimated via MCMC. This means we get full posterior distributions, not just point estimates. We can tell a sporting director: 'This player's expected goals per game is 0.35, with a 95% credible interval of 0.22 to 0.49.' That uncertainty quantification is what separates this from a simple xG model.
 
@@ -271,8 +271,8 @@ Out-of-sample predictive performance on upcoming matches:
     <span class="text-xs mt-1 text-gray-300">Lift: Top prediction decile vs Bottom decile</span>
   </div>
   <div class="bg-gray-800 flex flex-col justify-center items-center py-4 rounded border border-gray-700">
-    <span class="text-3xl font-bold text-indigo-400">0.278</span>
-    <span class="text-xs mt-1 text-gray-300">Best Brier Score across model variants</span>
+    <span class="text-3xl font-bold text-indigo-400">0.280</span>
+    <span class="text-xs mt-1 text-gray-300">Brier Score (best cross-validated model)</span>
   </div>
 </div>
 
@@ -296,36 +296,36 @@ Out-of-sample predictive performance on upcoming matches:
 <!--
 So it looks right, but does it predict well? Yes. We tested this rigorously out-of-sample.
 
-On held-out test data — over 42,000 player appearances the model has never seen — the SFM is over 15% more accurate at predicting future goals than a baseline that uses each player's historical Poisson scoring rate, which is actually a pretty decent benchmark.
+On held-out test data — over 42,000 player appearances the model has never seen — the SFM is over 15% more accurate at predicting future goals than a baseline that uses each player's historical Poisson scoring rate, which is actually a pretty decent benchmark. These numbers are from our best cross-validated model — meaning they survive the kind of rigorous out-of-sample testing that weeds out overfitting.
 
 The 2.5x lift is telling: players ranked in the top decile by our predictions score 27.5% of the time, versus 11% for the bottom decile. The model genuinely discriminates between players who will score and those who won't.
 
-Across leagues, the improvement is consistent — strongest in the Champions League at 23.1%, which makes sense because that's where team-strength differentials matter most.
+Across leagues, the improvement is consistent — strongest in the Champions League at 23.7%, which makes sense because that's where team-strength differentials matter most.
 
 That's also because domestic matchups have a ton of historical data. In European competition, teams cross borders and face opponents they rarely play. In those high-uncertainty environments, having a robust model that understands underlying strength differentials is a massive structural advantage.
 -->
 
 ---
 
-# What Matters Most: Lessons from 19 Models
+# What Matters Most: Lessons from 20+ Models
 
-We conducted a systematic ablation study testing factor combinations. Here is what we learned actually moves the needle:
+We conducted a systematic ablation study testing factor combinations, evaluated with cross-validation. Here is what we learned:
 
 <v-clicks>
 
 <div class="mt-6 flex gap-4 items-start">
   <div class="bg-emerald-900 text-emerald-300 rounded-full w-8 h-8 flex items-center justify-center shrink-0">1</div>
   <div>
-    <h4 class="font-bold text-gray-200">Player-specific momentum is the biggest lever</h4>
-    <p class="text-sm text-gray-400 mt-1">Provided a massive ~900 log-likelihood improvement over pooled models. Crucially, <i>not all players respond equally to being on a hot streak.</i> Some are streaky; some are metronomic.</p>
+    <h4 class="font-bold text-gray-200">Momentum matters, but complexity kills</h4>
+    <p class="text-sm text-gray-400 mt-1">Player-specific momentum looked amazing in-sample (~900 logLik gain), but <i>collapsed under cross-validation</i>. Pooled momentum is the robust choice. A cautionary tale: more parameters can fit noise, not signal.</p>
   </div>
 </div>
 
 <div class="mt-4 flex gap-4 items-start">
   <div class="bg-cyan-900 text-cyan-300 rounded-full w-8 h-8 flex items-center justify-center shrink-0">2</div>
   <div>
-    <h4 class="font-bold text-gray-200">Sparse beats kitchen-sink</h4>
-    <p class="text-sm text-gray-400 mt-1">Models with fewer, stronger factors (points differential + positions + momentum + opponent strength) matched full-factor accuracy but better differentiated player skill levels.</p>
+    <h4 class="font-bold text-gray-200">Prediction vs. differentiation: a fundamental trade-off</h4>
+    <p class="text-sm text-gray-400 mt-1">Rich factor models predict best (LOOCV), but sparse models better differentiate players (higher SAR dispersion). The right choice depends on the use case: match probabilities vs. player scouting.</p>
   </div>
 </div>
 
@@ -340,15 +340,19 @@ We conducted a systematic ablation study testing factor combinations. Here is wh
 </v-clicks>
 
 <!--
-We didn't just build one model, we built and tested 19 variants to see what features actually drive goalscoring.
+We didn't just build one model — we built and tested over 20 variants to see what features actually drive goalscoring. And crucially, we evaluated them with leave-one-out cross-validation and WAIC, not just in-sample fit.
 
-Our biggest takeaway? Momentum is incredibly player-specific. The assumption that everyone gets a boost from a hot streak is false. Some players are incredibly streaky, others just regress to their mean immediately. Allowing the model to learn individual momentum sensitivities was our biggest performance leap.
+Our biggest lesson was a humbling one. We built models where each player gets their own momentum sensitivity — so Haaland responds differently to a hot streak than Kane does. In-sample, this was our biggest performance leap: 900 log-likelihood points. Incredibly compelling.
 
-Second, less is more. Sparse models using just points differential, positions, momentum, and opponent strength matched the accuracy of kitchen-sink models with 9+ factors. But crucially, the sparse models were better at differentiating players — higher SAR dispersion. Adding more factors just adds noise.
+But when we evaluated with cross-validation, those models ranked dead last. That 900-point in-sample gain turned into a 4,000-point cross-validation penalty. With 2,850 players, each getting their own momentum parameter, the model was fitting noise — memorizing individual quirks rather than learning generalizable patterns.
 
-Fourth, opponent defensive rank beats the 'goal appeal' metric. How many goals the opponent concedes is more informative than how many goals both teams typically score. Concrete > abstract.
+The fix? Pool momentum — give every player the same momentum sensitivity. When we did that, the model with pooled momentum ranked 2nd overall, just 15 cross-validation points behind the winner. So momentum matters, but the way you parameterize it makes all the difference.
 
-The communication lesson here? When presenting model choices to stakeholders, I've learned to frame it as 'we tested 19 versions and here's what actually moves the needle.' That builds confidence even among people who can't evaluate the statistics directly.
+The second key insight is a genuine trade-off: models with more contextual factors predict best under cross-validation, but they attribute more variance to context and less to individual skill. So SAR dispersion — how well the model differentiates players — shrinks. Sparse models are worse at prediction but better at telling you who's truly elite. The right model depends on your use case.
+
+Third, opponent defensive rank consistently beats the 'goal appeal' metric across every model variant. How many goals the opponent concedes is more informative than how many goals both teams typically score. Concrete beats abstract.
+
+The meta-lesson for anyone building complex models: always cross-validate. In-sample fit rewards complexity. Cross-validation rewards signal.
 -->
 
 ---
